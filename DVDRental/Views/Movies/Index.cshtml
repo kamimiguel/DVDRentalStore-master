@@ -1,0 +1,54 @@
+﻿@model IEnumerable<DVDRental.Models.Movie>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var availableCopies = (List<Copy>)ViewData["copies"];
+}
+
+<h1>Movies</h1>
+
+@if (User.IsInRole("Admin")) { <p><a asp-action="Create">Create New</a></p> }
+<table class="table">
+    <thead>
+        <tr>
+            <th width="300">Movies</th>
+            <th>
+                <p align="right">
+                    @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.NextSortOrder, sortItem = "title"}) @ViewBag.TitleSortingSymbol
+                     | 
+                    @Html.ActionLink("Year", "Index", new { sortOrder = ViewBag.NextSortOrder, sortItem = "year"}) @ViewBag.YearSortingSymbol
+                    |
+                    @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.NextSortOrder, sortItem = "price"}) @ViewBag.PriceSortingSymbol
+                </p>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src = "@item.imageLink" width="300" alt="poster">
+                </td>
+                <td>
+                    <div style="height:450px;">
+                        <p class="title">@Html.DisplayFor(modelItem => item.title)</p>
+                        <p class="year">@Html.DisplayFor(modelItem => item.year)</p>
+                        <p class="overview">@Html.DisplayFor(modelItem => item.shortOverview)</p>
+                        <p class="price">Buy for @Html.DisplayFor(modelItem => item.price)zł / Rent for @Html.DisplayFor(modelItem => item.rentPrice)zł</p>
+                        @if(!availableCopies.Where(c => c.movieId == item.id).Any()) { <p style="color:red;font-size:20px;font-weight:bold;">NOT AVAILABLE</p>}
+                    </div>
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

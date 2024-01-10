@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<DVDRental.Models.Rental>
+
+@{
+    ViewData["Title"] = "History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var copies = (List<Copy>)ViewData["copies"];
+    var movies = (List<Movie>)ViewData["movies"];
+}
+
+<h1>History</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Movie</p>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.rentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.returnDate)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @movies.Find(m => m.id == copies.Find(c => c.id == item.copyId).movieId).title
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rentDate)
+            </td>
+            <td>
+                @if(item.returnDate == null) 
+                {
+                    <p>not yet returned</p>
+                }
+                else 
+                {
+                    <p>@item.returnDate</p>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,52 @@
+﻿    @model DVDRental.Models.Rental
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var copies = (List<Copy>)ViewData["copies"];
+    var copy = copies.Find(c => c.id == Model.copyId);
+}
+
+<h1>Edit</h1>
+
+<h4>Rental</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" />
+            <div class="form-group">
+                <label asp-for="userId" class="control-label"></label>
+                <input asp-for="userId"  class="form-control" readonly/>
+                <span asp-validation-for="userId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="copyId" class="control-label"></label>
+                <input asp-for="copyId"  class="form-control" readonly value='@copy.id'/>
+                <span asp-validation-for="copyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="rentDate" class="control-label"></label>
+                <input asp-for="rentDate" class="form-control" readonly/>
+                <span asp-validation-for="rentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="returnDate" class="control-label"></label>
+                <input asp-for="returnDate" class="form-control" />
+                <span asp-validation-for="returnDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
